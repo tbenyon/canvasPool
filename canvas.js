@@ -1,3 +1,30 @@
+var loadcount = 0;
+var loadtotal = 0;
+var preloaded = false;
+
+function loadImages(imagefiles) {
+    loadcount = 0;
+    loadtotal = imagefiles.length;
+    preloaded = false;
+
+    var loadedimages = [];
+    for (var i=0; i<imagefiles.length; i++) {
+        var image = new Image();
+
+        image.onload = function () {
+            loadcount++;
+            if (loadcount == loadtotal) {
+                preloaded = true;
+            }
+        };
+
+        image.src = imagefiles[i];
+        loadedimages[i] = image;
+    }
+
+    return loadedimages;
+}
+
 function draw() {
     var canvas = document.getElementById('myCanvas');
     var canvasWidth = canvas.width;
@@ -17,16 +44,15 @@ function draw() {
 
     if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
-        var imageObj = new Image();
-        imageObj.onload = animate();
-        imageObj.src = 'redBall.png';
+        var images = loadImages(["redBall.png"]);
+        animate();
     } else {
         console.log("Canvas-unsupported code here");
     }
 
     function animate() {
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-        ctx.drawImage(imageObj, circle.x, circle.y, circle.diameter, circle.diameter);
+        ctx.drawImage(images[0], circle.x, circle.y, circle.diameter, circle.diameter);
         circle.x += circle.xVel;
         circle.y += circle.yVel;
 
