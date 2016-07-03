@@ -1,20 +1,36 @@
 function draw() {
     var canvas = document.getElementById('myCanvas');
+    var canvasWidth = canvas.width;
+    var canvasHeight = canvas.height;
 
-    if (canvas.getContext){
+    var circle = {'x': 10, 'y': 10, 'xVel': 5, 'diameter': 40};
+
+    var requestAnimationFrame =
+        window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        function(callback) {
+            return setTimeout(callback, 1);
+        };
+
+    if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
-        circles(ctx);
+        var imageObj = new Image();
+        imageObj.onload = animate();
+        imageObj.src = 'redBall.png';
     } else {
-        Console.log("Canvas-unsupported code here");
+        console.log("Canvas-unsupported code here");
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        ctx.drawImage(imageObj, circle.x, circle.y, circle.diameter, circle.diameter);
+        circle.x += circle.xVel;
+        if (circle.x > canvasWidth - circle.diameter|| circle.x < 0) {
+            circle.xVel *= -1
+        }
+        requestAnimationFrame(animate);
     }
 }
-
-function circles(ctx) {
-    var imageObj = new Image();
-    imageObj.onload = function() {
-        ctx.drawImage(imageObj, 10, 10, 40, 40);
-    };
-    imageObj.src = 'redBall.png';
-
-}
-
