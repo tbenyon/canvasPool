@@ -3,7 +3,7 @@ function draw() {
     var canvasWidth = canvas.width;
     var canvasHeight = canvas.height;
 
-    var circle = {'x': 10, 'y': 10, 'xVel': 5, 'diameter': 40};
+    var circle = {'x': 10, 'y': 10, 'xVel': 5, 'yVel': 5, 'diameter': 40};
 
     var requestAnimationFrame =
         window.requestAnimationFrame ||
@@ -28,8 +28,13 @@ function draw() {
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         ctx.drawImage(imageObj, circle.x, circle.y, circle.diameter, circle.diameter);
         circle.x += circle.xVel;
+        circle.y += circle.yVel;
+
         if (circle.x > canvasWidth - circle.diameter|| circle.x < 0) {
             circle.xVel *= -1
+        }
+        if (circle.y > canvasHeight - circle.diameter|| circle.y < 0) {
+            circle.yVel *= -1
         }
         requestAnimationFrame(animate);
     }
