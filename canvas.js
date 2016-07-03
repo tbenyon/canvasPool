@@ -1,4 +1,3 @@
-
 function draw() {
     var canvas = document.getElementById('myCanvas');
 
@@ -8,16 +7,14 @@ function draw() {
     } else {
         Console.log("Canvas-unsupported code here");
     }
-
-
-
 }
 
 function circles(ctx) {
-    ctx.fillStyle = "rgb(200,0,0)";
-    ctx.fillRect (10, 10, 50, 50);
+    var imageObj = new Image();
+    imageObj.onload = function() {
+        ctx.drawImage(imageObj, 10, 10, 40, 40);
+    };
+    imageObj.src = 'redBall.png';
 
-    ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
-    ctx.fillRect (30, 30, 50, 50);
 }
 
