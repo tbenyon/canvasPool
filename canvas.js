@@ -44,7 +44,8 @@ function draw() {
 
     if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
-        var images = loadImages(["redBall.png"]);
+        var images = loadImages(["redBall.png", "wood.jpg"]);
+        var woodPattern;
         animate();
     } else {
         console.log("Canvas-unsupported code here");
@@ -52,6 +53,9 @@ function draw() {
 
     function animate() {
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        woodPattern = ctx.createPattern(images[1],"repeat");
+        ctx.fillStyle = woodPattern;
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
         ctx.drawImage(images[0], circle.x, circle.y, circle.diameter, circle.diameter);
         circle.x += circle.xVel;
         circle.y += circle.yVel;
