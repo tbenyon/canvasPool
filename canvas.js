@@ -29,10 +29,10 @@ function draw() {
     var canvas = document.getElementById('myCanvas');
     var canvasWidth = canvas.width;
     var canvasHeight = canvas.height;
-    var dim = setupDimensions(canvasWidth);
+    var dim = setupDimensions(canvasWidth, canvasHeight);
     console.log(dim);
 
-    var circle = {'x': 10, 'y': 10, 'xVel': 5, 'yVel': 5, 'diameter': 30};
+    var circle = {'x': canvasWidth / 2, 'y': canvasHeight / 2, 'xVel': 5, 'yVel': 5, 'diameter': 30};
 
     var requestAnimationFrame =
         window.requestAnimationFrame ||
@@ -60,10 +60,10 @@ function draw() {
         circle.x += circle.xVel;
         circle.y += circle.yVel;
 
-        if (circle.x > canvasWidth - circle.diameter|| circle.x < 0) {
+        if (circle.x > dim.rightCushion - circle.diameter|| circle.x < dim.leftCushion) {
             circle.xVel *= -1
         }
-        if (circle.y > canvasHeight - circle.diameter|| circle.y < 0) {
+        if (circle.y > dim.bottomCushion - circle.diameter|| circle.y < dim.topCushion) {
             circle.yVel *= -1
         }
         requestAnimationFrame(animate);
@@ -203,7 +203,7 @@ function draw() {
     }
 }
 
-function setupDimensions(canvasWidth) {
+function setupDimensions(canvasWidth, canvasHeight) {
     var buffer = canvasWidth * 0.05;
     var woodWidth = canvasWidth * 0.04;
     var feltFromEdge = buffer + woodWidth;
@@ -213,6 +213,10 @@ function setupDimensions(canvasWidth) {
     var cushionThickness = (woodWidth * 0.25);
     var centreCushionDiagonalOffset = pocketSize * 0.1;
     var cornerCushionDiagonalOffset = cushionThickness;
+    var topCushion = feltFromEdge + cushionThickness;
+    var bottomCushion = canvasHeight - topCushion;
+    var leftCushion = topCushion;
+    var rightCushion = canvasWidth - topCushion;
 
     var sizes = {
         buffer: buffer,
@@ -223,7 +227,11 @@ function setupDimensions(canvasWidth) {
         middleHoleAdjustment: middleHoleAdjustment,
         cushionThickness: cushionThickness,
         centreCushionDiagonalOffset: centreCushionDiagonalOffset,
-        cornerCushionDiagonalOffset: cornerCushionDiagonalOffset
+        cornerCushionDiagonalOffset: cornerCushionDiagonalOffset,
+        topCushion: topCushion,
+        bottomCushion: bottomCushion,
+        leftCushion: leftCushion,
+        rightCushion: rightCushion
     };
     return sizes
 }
