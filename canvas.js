@@ -1,6 +1,7 @@
 var loadcount = 0;
 var loadtotal = 0;
 var preloaded = false;
+var shot = {down: false, downTime: 0, upTime: 0, power: 0};
 
 function loadImages(imagefiles) {
     loadcount = 0;
@@ -27,12 +28,14 @@ function loadImages(imagefiles) {
 
 function draw() {
     var canvas = document.getElementById('myCanvas');
+    document.addEventListener( "keydown", keydown, true);
+    document.addEventListener( "keyup", keyup, true);
     var canvasWidth = canvas.width;
     var canvasHeight = canvas.height;
     var dim = setupDimensions(canvasWidth, canvasHeight);
-    console.log(dim);
 
     var circle = {'x': canvasWidth / 2, 'y': canvasHeight / 2, 'xVel': 5, 'yVel': 5, 'diameter': 30};
+    var yellowBall = {'x': 250, 'y': 200, 'xVel': 5, 'yVel': 5, 'diameter': 30, power: 0};
 
     var requestAnimationFrame =
         window.requestAnimationFrame ||
@@ -46,16 +49,36 @@ function draw() {
 
     if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
-        var images = loadImages(["redBall.png", "wood.jpg"]);
+        var images = loadImages(["redBall.png", "wood.jpg", "yellowBall.png"]);
         var woodPattern;
         animate();
     } else {
-        console.log("Canvas-unsupported code here");
+        alert("Canvas-unsupported. Try using Chrome?");
+        return false;
+    }
+
+    function keydown(event) {
+        if (event.keyCode == 32 && shot.down == false) {
+			shot.down = true;
+			shot.downTime = new Date().getTime();
+		}
+    }
+
+    function keyup(event) {
+        if (event.keyCode == 32) {
+			shot.upTime = new Date().getTime();
+			shot.power = shot.upTime - shot.downTime;
+			shot.down = false;
+			yellowBall.x += shot.power;
+		}
     }
 
     function animate() {
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawTable();
+
+        ctx.drawImage(images[2], yellowBall.x, yellowBall.y, circle.diameter, circle.diameter);
+
         ctx.drawImage(images[0], circle.x, circle.y, circle.diameter, circle.diameter);
         circle.x += circle.xVel;
         circle.y += circle.yVel;
